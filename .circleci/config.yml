@@ -42,13 +42,15 @@ jobs:
 
       # run tests!ddd
       - run: gradle jibDockerBuild
+      - run: docker images
+      - run: docker pull 446786005327.dkr.ecr.us-west-1.amazonaws.com/wallet/name-service
+
   push:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker pull 446786005327.dkr.ecr.us-west-1.amazonaws.com/wallet/name-service
 
 workflows:
   version: 2
