@@ -32,5 +32,5 @@ subprojects {
   }
 
   // IMPORTANT: Set the environment variable PROJECT_ID to your own Google Cloud Platform project.
-  jib.to.image = "gcr.io/${System.getenv('PROJECT_ID')}/${project.name}:${version}"
+  jib.to.image = "446786005327.dkr.ecr.us-west-1.amazonaws.com/wallet/${project.name}:latest"
 }
