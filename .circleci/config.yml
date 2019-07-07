@@ -46,13 +46,9 @@ jobs:
       # run tests!ddd
       - run: gradle jibDockerBuild
       - run: docker images
-      - run:
-          name: Install dependencies
-          command: |
-            sudo su
-            sudo apt-get update && apt-get install -y python-pip
-            pip install awscli==1.11.76
-            apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+      - run: sudo su
+      - run: apt-get update && apt-get install -y python-pip
+      - run: pip install awscli==1.11.76
       - deploy:
           name: Push application Docker image
           command: |
