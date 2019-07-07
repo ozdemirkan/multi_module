@@ -2,15 +2,15 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2.0
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@6.1.0
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID  # can specify string literal values
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY  # or project UI envar reference
+
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -26,3 +26,39 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!ddd
+      - run: gradle jibDockerBuild
+      - run: docker images
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=9.0.0-r1
+            pip install awscli==1.11.76
+      - deploy:
+          name: Push application Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              # Login to AWS
+              aws configure set region $AWS_REGION
+              $(aws ecr get-login)
+              DOCKER_IMAGE='wallet/hello-service'
+              docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:LATEST
+              return 0
+            fi
