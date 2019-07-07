@@ -53,7 +53,7 @@ jobs:
           name: Push application Docker image
           command: |
             aws configure set region $AWS_REGION
-            $(aws ecr get-login) --no-include-email
+            $(aws ecr get-login --no-include-email) 
             DOCKER_IMAGE='wallet/hello-service'
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:LATEST
             return 0
