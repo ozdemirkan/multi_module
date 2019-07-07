@@ -2,7 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@6.1.0
 jobs:
   build:
     docker:
@@ -43,6 +45,7 @@ jobs:
       # run tests!ddd
       - run: gradle jibDockerBuild
       - run: docker images
+      - aws-ecr/login:
       - run: docker pull 446786005327.dkr.ecr.us-west-1.amazonaws.com/wallet/name-service
 
   push:
