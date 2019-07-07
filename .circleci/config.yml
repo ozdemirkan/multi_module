@@ -42,26 +42,18 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
       - run: gradle dependencies
-
       - save_cache:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      # run tests!ddd
       - run: gradle jibDockerBuild
       - run: docker images
-
       - deploy:
           name: Push application Docker image
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              # Login to AWS
-              aws configure set region $AWS_REGION
-              $(aws ecr get-login)
-              DOCKER_IMAGE='wallet/hello-service'
-              docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:LATEST
-              return 0
-            fi
+            aws configure set region $AWS_REGION
+            $(aws ecr get-login)
+            DOCKER_IMAGE='wallet/hello-service'
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:LATEST
+            return 0
