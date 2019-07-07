@@ -13,6 +13,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID  # can specify string literal values
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY  # or project UI envar reference
+          aws_region: eu-west-1
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
