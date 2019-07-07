@@ -25,9 +25,8 @@ jobs:
       TERM: dumb
 
     steps:
-      - run: sudo bash -eo pipefail
-      - run: apt-get update && apt-get install -y python-pip
-      - run: pip install awscli==1.11.76
+      - run: sudo apt-get update && apt-get install -y python-pip
+      - run: sudo pip install awscli==1.11.76
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
