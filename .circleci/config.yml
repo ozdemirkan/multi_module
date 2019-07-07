@@ -25,7 +25,8 @@ jobs:
       TERM: dumb
 
     steps:
-      - run: sudo su
+      - run: /bin/sh
+      - run: sudo su -
       - run: apt-get update && apt-get install -y python-pip
       - run: pip install awscli==1.11.76
       - checkout
