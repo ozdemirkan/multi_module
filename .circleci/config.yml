@@ -57,5 +57,4 @@ jobs:
               $(aws ecr get-login --region us-west-1 --no-include-email) 
               DOCKER_IMAGE='wallet/hello-service'
               docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-1.amazonaws.com/$DOCKER_IMAGE:latest
-              return 0
             fi
