@@ -25,6 +25,9 @@ jobs:
       TERM: dumb
 
     steps:
+      - run: sudo su
+      - run: apt-get update && apt-get install -y python-pip
+      - run: pip install awscli==1.11.76
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
@@ -46,9 +49,7 @@ jobs:
       # run tests!ddd
       - run: gradle jibDockerBuild
       - run: docker images
-      - run: sudo su
-      - run: apt-get update && apt-get install -y python-pip
-      - run: pip install awscli==1.11.76
+
       - deploy:
           name: Push application Docker image
           command: |
