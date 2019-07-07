@@ -50,10 +50,9 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
+      - run: docker images
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker images
-      - aws-ecr/login
 
 workflows:
   version: 2
