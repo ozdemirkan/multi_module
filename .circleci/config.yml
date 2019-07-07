@@ -40,7 +40,7 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # run tests!
+      # run tests!ddd
       - run: gradle jibDockerBuild
   push:
     docker:
