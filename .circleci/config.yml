@@ -54,7 +54,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws configure set region $AWS_REGION
-              $(aws ecr get-login --region us-west-1 --no-include-email) 
+              $(aws ecr get-login --region $AWS_REGION --no-include-email) 
               DOCKER_IMAGE='wallet/hello-service'
-              docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-1.amazonaws.com/$DOCKER_IMAGE:latest
+              docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest
             fi
