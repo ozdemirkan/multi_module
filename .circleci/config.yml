@@ -52,5 +52,5 @@ workflows:
     #                - master
     #                - beta
     jobs:
-      - build
+      - build:
           context: sonar
