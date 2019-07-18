@@ -3,8 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2.1
-orbs:
-  aws-ecr: circleci/aws-ecr@6.1.0
 jobs:
   build:
     docker:
@@ -25,16 +23,7 @@ jobs:
       TERM: dumb
 
     steps:
-      - run:
-          name: Install dependencies
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python-pip
-            sudo pip install awscli==1.11.91
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+
 
       # Download and cache dependencies
       - restore_cache:
@@ -47,14 +36,6 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: gradle jibDockerBuild
-      - run: docker images
-      - deploy:
-          name: Push application Docker image
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              aws configure set region $AWS_REGION
-              $(aws ecr get-login --region $AWS_REGION --no-include-email) 
-              DOCKER_IMAGE='wallet/hello-service'
-              docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE:latest
-            fi
+      - run: gradle build -x check
+      - run: gradle sonarqube   -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_LOGIN
+
