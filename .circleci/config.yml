@@ -40,3 +40,17 @@ jobs:
       - run: ./gradlew build
       - run: ./gradlew sonarqube   -Dsonar.projectKey=$SONAR_PROJECTKEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_LOGIN
 
+workflows:
+  version: 2
+  workflow:
+    #    triggers:
+    #      - schedule:
+    #          cron: "0 0 * * *"
+    #          filters:
+    #            branches:
+    #              only:
+    #                - master
+    #                - beta
+    jobs:
+      - build
+          context: sonar
